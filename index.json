@@ -1,0 +1,69 @@
+{
+  "apps": [
+    {
+      "id": "shelf",
+      "name": "Shelf",
+      "packageName": "com.personal.shelf",
+      "description": "Your private app store. Installs and updates your own apps, in the background where Android allows it.",
+      "versionCode": 1,
+      "versionName": "1.0",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/shelf-v1/shelf-1.0.apk",
+      "sha256": "2f2d73d8f6b97d16dbbbb9ce2bffb3d5a751352c28bc4399ec2ea8635a01a185",
+      "size": 6934502,
+      "iconUrl": "icons/shelf.png",
+      "changelog": "• Shelf: private app store and publish pipeline",
+      "updatedAt": "2026-11-04T16:19:04.199Z",
+      "certSha256": "7df7ee706bae69112cdaf6ba2afd7eb49223ff24a2c063f4784adf344e9c8e44",
+      "commit": "2b832bc45fcf6334abaa5e2c8484dee1469dd61c"
+    },
+    {
+      "id": "cleantube",
+      "name": "CleanTube",
+      "packageName": "com.personal.cleantube",
+      "description": "Native YouTube client with no Shorts and no ads. Background play, picture-in-picture, SponsorBlock, downloads and captions.",
+      "versionCode": 4,
+      "versionName": "1.3",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/cleantube-v4/cleantube-1.3.apk",
+      "sha256": "96fd5bb78ac67263c656c518454976e58ddb362b4f36fdd8e0fe6168785a5bfc",
+      "size": 12181801,
+      "iconUrl": "icons/cleantube.png",
+      "changelog": "• CleanTube 1.3: player gestures and play queue\n• CleanTube 1.2: offline downloads and captions\n• CleanTube 1.1: YouTube account, Takeout import, SponsorBlock\n• CleanTube 1.0: native YouTube client without Shorts or ads",
+      "updatedAt": "2026-11-04T16:19:31.315Z",
+      "certSha256": "311e183e8289236c8c0253b19838f4ecd11a8c5b5b76dc330d9b821d0c3cfde7",
+      "commit": "439d4b1183efe8dd17e5fe2395c578c8a4ef8a76"
+    },
+    {
+      "id": "insta-no-reels",
+      "name": "Insta",
+      "packageName": "com.personal.instanoreels",
+      "description": "Instagram without Reels. Feed, stories and messages, with every Reel link and tab removed.",
+      "versionCode": 3,
+      "versionName": "2.0",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/insta-no-reels-v3/insta-no-reels-2.0.apk",
+      "sha256": "0d3c51cc864586f9b8192cb3b01c9c4785be6e3fd148f21c10d95fffcef4aaba",
+      "size": 54154,
+      "iconUrl": "icons/insta-no-reels.png",
+      "changelog": "Improvements and fixes.",
+      "updatedAt": "2026-11-04T16:19:49.003Z",
+      "certSha256": "ac96fde05c01a315f25b051efbcf6415dc49468d2a681d26e9ce833857e05750",
+      "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
+    },
+    {
+      "id": "yt-no-shorts",
+      "name": "YT No Shorts",
+      "packageName": "com.personal.ytnoshorts",
+      "description": "The YouTube mobile site with Shorts stripped out and ads blocked.",
+      "versionCode": 1,
+      "versionName": "1.0",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/yt-no-shorts-v1/yt-no-shorts-1.0.apk",
+      "sha256": "d0709b49b16bebd378c613ede5b79506fc778daed9d86970ac3f7f4f90f90d5f",
+      "size": 21017,
+      "iconUrl": "icons/yt-no-shorts.png",
+      "changelog": "Improvements and fixes.",
+      "updatedAt": "2026-11-04T16:20:06.523Z",
+      "certSha256": "6f8b4ae4296eb25071f7f46dace0a2ce29645bd8191c08d2bb47ee28f475757b",
+      "commit": null
+    }
+  ],
+  "updated": "2026-11-04T16:20:06.523Z"
+}
