@@ -19,14 +19,14 @@ android {
         applicationId = "com.personal.shelf"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
         // Where the catalog lives. Can be changed in the app's settings (e.g. to a local test feed).
         buildConfigField("String", "FEED_URL", "\"https://raw.githubusercontent.com/akshays6325/shelf/main/index.json\"")
         // Ratings and reviews server (shelf/server). Empty hides sign-in and reviews.
         buildConfigField("String", "REVIEWS_URL", "\"https://shelf-reviews.onrender.com\"")
         // Google Cloud "Web application" OAuth client ID; the server accepts ID tokens issued for it.
-        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"197609203086-8mqlp9ca3mi8b772lqggpbmjrd86agib.apps.googleusercontent.com\"")
     }
 
     signingConfigs {
