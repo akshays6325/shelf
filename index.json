@@ -21,16 +21,16 @@
       "name": "CleanTube",
       "packageName": "com.personal.cleantube",
       "description": "Native YouTube client with no Shorts and no ads. Background play, picture-in-picture, SponsorBlock, downloads and captions.",
-      "versionCode": 4,
-      "versionName": "1.3",
-      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/cleantube-v4/cleantube-1.3.apk",
-      "sha256": "96fd5bb78ac67263c656c518454976e58ddb362b4f36fdd8e0fe6168785a5bfc",
-      "size": 12181801,
+      "versionCode": 7,
+      "versionName": "1.6",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/cleantube-v7/cleantube-1.6.apk",
+      "sha256": "d6771177bd4346166146c97032e9362fc8a528e5335e7d214dc771b3cc26297f",
+      "size": 12236737,
       "iconUrl": "icons/cleantube.png",
-      "changelog": "• CleanTube 1.3: player gestures and play queue\n• CleanTube 1.2: offline downloads and captions\n• CleanTube 1.1: YouTube account, Takeout import, SponsorBlock\n• CleanTube 1.0: native YouTube client without Shorts or ads",
-      "updatedAt": "2026-11-04T16:19:31.315Z",
+      "changelog": "Local playlists and Watch later, backup and restore, DeArrow titles and thumbnails, and autoplay",
+      "updatedAt": "2026-11-04T21:32:43.467Z",
       "certSha256": "311e183e8289236c8c0253b19838f4ecd11a8c5b5b76dc330d9b821d0c3cfde7",
-      "commit": "439d4b1183efe8dd17e5fe2395c578c8a4ef8a76"
+      "commit": "cc3f2b42e8f5efaf4cabba142a0e51ca866c1711"
     },
     {
       "id": "insta-no-reels",
@@ -49,5 +49,5 @@
       "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
     }
   ],
-  "updated": "2026-11-04T17:07:16.591Z"
+  "updated": "2026-11-04T21:32:43.467Z"
 }
