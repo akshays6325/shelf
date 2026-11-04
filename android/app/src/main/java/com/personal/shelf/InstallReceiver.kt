@@ -19,13 +19,13 @@ class InstallReceiver : BroadcastReceiver() {
                 } else {
                     // Android blocks opening screens from the background, so ask through a notification.
                     Notifier.confirmInstall(ctx, pkg, name, confirm)
+                    Installer.set(pkg, InstallState.Idle)
                 }
             }
             PackageInstaller.STATUS_SUCCESS -> {
                 Installer.set(pkg, InstallState.Idle)
                 Installer.changed.tryEmit(pkg)
-                Notifier.clearConfirm(ctx, pkg)
-                if (!ShelfApp.inForeground) Notifier.updated(ctx, pkg, name, version)
+                if (ShelfApp.inForeground) Notifier.clear(ctx, pkg) else Notifier.updated(ctx, pkg, name, version)
             }
             PackageInstaller.STATUS_FAILURE_ABORTED -> Installer.set(pkg, InstallState.Idle)
             else -> {
@@ -34,6 +34,9 @@ class InstallReceiver : BroadcastReceiver() {
                     "The installed copy is signed with a different key. Uninstall it, then install from Shelf."
                 else msg
                 Installer.set(pkg, InstallState.Failed(friendly))
+                if (intent.getBooleanExtra(EXTRA_BACKGROUND, false)) {
+                    Notifier.updateFailed(ctx, pkg, name, version, intent.getLongExtra(EXTRA_VERSION_CODE, 0))
+                }
             }
         }
     }
@@ -42,6 +45,7 @@ class InstallReceiver : BroadcastReceiver() {
         const val EXTRA_PKG = "shelf.pkg"
         const val EXTRA_NAME = "shelf.name"
         const val EXTRA_VERSION = "shelf.version"
+        const val EXTRA_VERSION_CODE = "shelf.versionCode"
         const val EXTRA_BACKGROUND = "shelf.background"
     }
 }

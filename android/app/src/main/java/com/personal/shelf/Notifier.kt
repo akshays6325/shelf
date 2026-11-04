@@ -12,63 +12,77 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
+/**
+ * One notification per app. It goes through "available" -> "updated" (or "failed") in place,
+ * making a sound only when it first appears.
+ */
 object Notifier {
     private const val CH_UPDATES = "updates"
-    private const val CH_INSTALLED = "installed"
-    private const val ID_AVAILABLE = 1
 
     fun createChannels(ctx: Context) {
         if (Build.VERSION.SDK_INT < 26) return
         val nm = ctx.getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannel(NotificationChannel(CH_UPDATES, "Available updates", NotificationManager.IMPORTANCE_DEFAULT))
-        nm.createNotificationChannel(NotificationChannel(CH_INSTALLED, "Installed updates", NotificationManager.IMPORTANCE_LOW))
+        nm.createNotificationChannel(NotificationChannel(CH_UPDATES, "App updates", NotificationManager.IMPORTANCE_DEFAULT))
+        // Left over from Shelf 1.3 and older
+        nm.deleteNotificationChannel("installed")
+        nm.cancel(1)
     }
 
-    private fun canPost(ctx: Context) = Build.VERSION.SDK_INT < 33 ||
-        ContextCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    fun enabled(ctx: Context): Boolean {
+        val permitted = Build.VERSION.SDK_INT < 33 ||
+            ContextCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        return permitted && NotificationManagerCompat.from(ctx).areNotificationsEnabled()
+    }
 
     private fun openApp(ctx: Context) = PendingIntent.getActivity(
         ctx, 0, Intent(ctx, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
+    private fun builder(ctx: Context) = NotificationCompat.Builder(ctx, CH_UPDATES)
+        .setSmallIcon(R.drawable.ic_stat_shelf)
+        .setContentIntent(openApp(ctx))
+        .setOnlyAlertOnce(true)
+        .setAutoCancel(true)
+
     @Suppress("MissingPermission")
-    private fun post(ctx: Context, id: Int, b: NotificationCompat.Builder) {
-        if (canPost(ctx)) NotificationManagerCompat.from(ctx).notify(id, b.build())
+    private fun post(ctx: Context, pkg: String, b: NotificationCompat.Builder) {
+        if (enabled(ctx)) NotificationManagerCompat.from(ctx).notify(pkg.hashCode(), b.build())
     }
 
-    fun updatesAvailable(ctx: Context, apps: List<AppEntry>) {
-        if (apps.isEmpty()) {
-            NotificationManagerCompat.from(ctx).cancel(ID_AVAILABLE)
-            return
+    fun clear(ctx: Context, pkg: String) = NotificationManagerCompat.from(ctx).cancel(pkg.hashCode())
+
+    /** An installed app has a new version. [auto] means Shelf is installing it without asking. */
+    fun available(ctx: Context, app: AppEntry, auto: Boolean) {
+        val status = if (auto) "Installing automatically" else "Tap to open Shelf and update"
+        val b = builder(ctx)
+            .setContentTitle("${app.name} ${app.versionName} is available")
+            .setContentText(status)
+        if (app.changelog.isNotBlank()) {
+            b.setStyle(NotificationCompat.BigTextStyle().bigText("${app.changelog}\n\n$status"))
         }
-        val title = if (apps.size == 1) "${apps[0].name} ${apps[0].versionName} is available" else "${apps.size} updates available"
-        post(ctx, ID_AVAILABLE, NotificationCompat.Builder(ctx, CH_UPDATES)
-            .setSmallIcon(R.drawable.ic_stat_shelf)
-            .setContentTitle(title)
-            .setContentText(apps.joinToString(", ") { it.name })
-            .setContentIntent(openApp(ctx))
-            .setAutoCancel(true))
+        post(ctx, app.packageName, b)
     }
 
     fun confirmInstall(ctx: Context, pkg: String, name: String, confirm: Intent) {
         val pi = PendingIntent.getActivity(ctx, pkg.hashCode(), confirm,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        post(ctx, pkg.hashCode(), NotificationCompat.Builder(ctx, CH_UPDATES)
-            .setSmallIcon(R.drawable.ic_stat_shelf)
+        post(ctx, pkg, builder(ctx)
             .setContentTitle("Update $name")
             .setContentText("Tap to finish installing")
-            .setContentIntent(pi)
-            .setAutoCancel(true))
+            .setContentIntent(pi))
     }
 
-    fun clearConfirm(ctx: Context, pkg: String) = NotificationManagerCompat.from(ctx).cancel(pkg.hashCode())
-
     fun updated(ctx: Context, pkg: String, name: String, version: String) {
-        post(ctx, pkg.hashCode() + 1, NotificationCompat.Builder(ctx, CH_INSTALLED)
-            .setSmallIcon(R.drawable.ic_stat_shelf)
+        post(ctx, pkg, builder(ctx)
             .setContentTitle("$name updated")
-            .setContentText(if (version.isNotBlank()) "Now on $version" else "Update installed")
-            .setContentIntent(openApp(ctx))
-            .setAutoCancel(true))
+            .setContentText(if (version.isNotBlank()) "Now on $version" else "Update installed"))
+    }
+
+    /** A background update didn't install. Said once per version, though Shelf keeps retrying. */
+    fun updateFailed(ctx: Context, pkg: String, name: String, version: String, versionCode: Long) {
+        if (!Prefs.firstTime(ctx, "$pkg:$versionCode")) return
+        post(ctx, pkg, builder(ctx)
+            .setContentTitle("Couldn't update $name to $version")
+            .setContentText("Shelf will try again. Tap to open it."))
     }
 }

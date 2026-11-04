@@ -42,6 +42,7 @@ object Installer {
             true
         } catch (e: Exception) {
             set(app.packageName, InstallState.Failed(e.message ?: e.javaClass.simpleName))
+            if (background) Notifier.updateFailed(ctx, app.packageName, app.name, app.versionName, app.versionCode)
             false
         }
     }
@@ -118,6 +119,7 @@ object Installer {
                 .putExtra(InstallReceiver.EXTRA_PKG, app.packageName)
                 .putExtra(InstallReceiver.EXTRA_NAME, app.name)
                 .putExtra(InstallReceiver.EXTRA_VERSION, app.versionName)
+                .putExtra(InstallReceiver.EXTRA_VERSION_CODE, app.versionCode)
                 .putExtra(InstallReceiver.EXTRA_BACKGROUND, background)
             val flags = PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= 31) PendingIntent.FLAG_MUTABLE else 0)
             session.commit(PendingIntent.getBroadcast(ctx, id, intent, flags).intentSender)

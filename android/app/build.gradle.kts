@@ -19,8 +19,8 @@ android {
         applicationId = "com.personal.shelf"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 5
+        versionName = "1.4"
         // Where the catalog lives. Can be changed in the app's settings (e.g. to a local test feed).
         buildConfigField("String", "FEED_URL", "\"https://raw.githubusercontent.com/akshays6325/shelf/main/index.json\"")
         // Ratings and reviews server (shelf/server). Empty hides sign-in and reviews.

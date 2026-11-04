@@ -25,6 +25,14 @@ object Prefs {
     fun notified(ctx: Context): Set<String> = p(ctx).getStringSet("notified", emptySet()) ?: emptySet()
     fun setNotified(ctx: Context, s: Set<String>) = p(ctx).edit().putStringSet("notified", s).apply()
 
+    /** True the first time it's called for this "package:versionCode": limits failure notices to one per version. */
+    fun firstTime(ctx: Context, key: String): Boolean {
+        val pkg = key.substringBefore(':')
+        if (p(ctx).getString("failed:$pkg", null) == key) return false
+        p(ctx).edit().putString("failed:$pkg", key).apply()
+        return true
+    }
+
     fun reviewsUrl(ctx: Context): String = p(ctx).getString("reviews", null) ?: BuildConfig.REVIEWS_URL
     fun setReviewsUrl(ctx: Context, url: String?) = p(ctx).edit().putString("reviews", url?.trim()).apply()
 

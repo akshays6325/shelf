@@ -117,6 +117,7 @@ fun ShelfScreen() {
     var error by remember { mutableStateOf<String?>(null) }
     var tick by remember { mutableIntStateOf(0) }          // bumps to re-read installed versions
     var canInstall by remember { mutableStateOf(true) }
+    var notificationsOn by remember { mutableStateOf(true) }
     var showSettings by remember { mutableStateOf(false) }
     var lastChecked by remember { mutableStateOf(Prefs.lastChecked(ctx)) }
     val states by Installer.states.collectAsState()
@@ -148,7 +149,7 @@ fun ShelfScreen() {
         }
     }
 
-    val notifPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    val notifPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { notificationsOn = Notifier.enabled(ctx) }
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= 33) notifPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         refresh()
@@ -158,6 +159,7 @@ fun ShelfScreen() {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         tick++
         canInstall = ctx.packageManager.canRequestPackageInstalls()
+        notificationsOn = Notifier.enabled(ctx)
     }
 
     val rows = remember(apps, tick) { apps.map { AppRow(it, Packages.installed(ctx, it.packageName)) } }
@@ -192,6 +194,13 @@ fun ShelfScreen() {
                 bottom = pad.calculateBottomPadding() + 24.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            if (!notificationsOn) item {
+                Notice("Turn on notifications",
+                    "Shelf uses them to tell you when an app has an update.", "Turn on") {
+                    ctx.startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, ctx.packageName))
+                }
+            }
             if (!canInstall) item {
                 Notice("Allow Shelf to install apps",
                     "Android asks once before an app can install other apps.", "Allow") { openUnknownSources(ctx) }
