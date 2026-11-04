@@ -35,3 +35,32 @@ node tools/serve.mjs                         # serves it on :8080
 ```
 
 Then in Shelf → Settings set the catalog URL to `http://10.0.2.2:8080/index.json` (emulator).
+
+## Accounts, ratings and reviews
+
+`server/` is a small review server (Node + Turso, deployed on Render from `render.yaml`).
+People sign in with Google in Shelf, rate apps 1–5 stars, write reviews and see developer replies.
+
+Read feedback and reply (needs `shelf/.env` with `SHELF_REVIEWS_URL` and `SHELF_ADMIN_TOKEN`):
+
+```bash
+node feedback.mjs              # everything
+node feedback.mjs --new        # only what changed since last time
+node feedback.mjs cleantube    # one app
+node feedback.mjs --reply 12 "Fixed in 1.4, thanks!"
+```
+
+Local testing: `cd server && DEV_LOGIN=1 ADMIN_TOKEN=test node server.js`, then in Shelf → Settings set
+Reviews server to `http://10.0.2.2:5191` and use "Test sign-in".
+
+### One-time setup
+
+1. **Turso**: create a database `shelf`; note its URL and an auth token.
+2. **Google Cloud** (the CleanTube project is fine):
+   - OAuth consent screen → *Publish app* (basic sign-in scopes need no review), so friends can sign in.
+   - Credentials → OAuth client ID → **Web application** ("Shelf server"): copy the client ID.
+   - Credentials → OAuth client ID → **Android**: package `com.personal.shelf`,
+     SHA-1 `2C:21:CD:39:11:8A:0C:F7:38:40:40:D1:0D:E1:47:1F:B8:56:F3:07`.
+3. **Render**: New → Blueprint → this repo. Fill `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`,
+   `GOOGLE_CLIENT_IDS` (the Web client ID). `ADMIN_TOKEN` is generated: put it in `shelf/.env`.
+4. Set `REVIEWS_URL` and `GOOGLE_WEB_CLIENT_ID` in `android/app/build.gradle.kts`, then `node publish.mjs shelf`.

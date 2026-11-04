@@ -23,6 +23,10 @@ android {
         versionName = "1.1"
         // Where the catalog lives. Can be changed in the app's settings (e.g. to a local test feed).
         buildConfigField("String", "FEED_URL", "\"https://raw.githubusercontent.com/akshays6325/shelf/main/index.json\"")
+        // Ratings and reviews server (shelf/server). Empty hides sign-in and reviews.
+        buildConfigField("String", "REVIEWS_URL", "\"https://shelf-reviews.onrender.com\"")
+        // Google Cloud "Web application" OAuth client ID; the server accepts ID tokens issued for it.
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"\"")
     }
 
     signingConfigs {
@@ -65,5 +69,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:2.8.4")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    // Sign in with Google
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }

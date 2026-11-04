@@ -8,6 +8,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 class ShelfApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        Account.load(this)
         Notifier.createChannels(this)
         UpdateWorker.schedule(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {

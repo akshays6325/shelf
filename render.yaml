@@ -1,0 +1,21 @@
+# Render Blueprint: the Shelf review server (free plan). Database lives on Turso (free).
+services:
+  - type: web
+    name: shelf-reviews
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: TURSO_DATABASE_URL
+        sync: false   # libsql://shelf-<you>.turso.io
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      - key: GOOGLE_CLIENT_IDS
+        sync: false   # the Web OAuth client ID from Google Cloud
+      - key: ADMIN_TOKEN
+        generateValue: true   # copy it into shelf/.env so `node feedback.mjs` can read reviews

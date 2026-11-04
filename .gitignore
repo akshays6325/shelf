@@ -1,2 +1,5 @@
 local-feed/
 node_modules/
+
+.env
+.feedback-seen

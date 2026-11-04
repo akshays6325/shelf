@@ -1,0 +1,15 @@
+{
+  "name": "shelf-reviews",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Accounts, ratings and reviews for the Shelf app store",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "DEV_LOGIN=1 node --watch server.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@libsql/client": "^0.18.0"
+  }
+}

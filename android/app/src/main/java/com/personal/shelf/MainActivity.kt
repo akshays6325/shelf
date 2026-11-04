@@ -120,10 +120,18 @@ fun ShelfScreen() {
     var showSettings by remember { mutableStateOf(false) }
     var lastChecked by remember { mutableStateOf(Prefs.lastChecked(ctx)) }
     val states by Installer.states.collectAsState()
+    val reviewsOn = remember { ReviewsApi.enabled(ctx) }
+    var ratings by remember { mutableStateOf(ReviewsApi.cachedRatings(ctx)) }
+    var showProfile by remember { mutableStateOf(false) }
+
+    fun refreshRatings() {
+        if (reviewsOn) scope.launch { runCatching { ratings = ReviewsApi.ratings(ctx) } }
+    }
 
     fun refresh() {
         if (loading) return
         loading = true
+        refreshRatings()
         scope.launch {
             try {
                 apps = Catalog.fetch(ctx)
@@ -173,6 +181,7 @@ fun ShelfScreen() {
                     if (loading) CircularProgressIndicator(Modifier.size(22.dp).padding(end = 2.dp), strokeWidth = 2.dp)
                     else IconButton(onClick = { refresh() }) { Icon(Icons.Default.Refresh, "Check for updates") }
                     IconButton(onClick = { showSettings = true }) { Icon(Icons.Default.Settings, "Settings") }
+                    if (reviewsOn) AccountButton { showProfile = true }
                 },
             )
         },
@@ -200,15 +209,15 @@ fun ShelfScreen() {
                         }) { Text("Update all") }
                     }
                 }
-                items(updates, key = { "u" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install) }
+                items(updates, key = { "u" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install, ratings[it.app.id].takeIf { reviewsOn }, reviewsOn, { showProfile = true }, ::refreshRatings) }
             }
             if (installed.isNotEmpty()) {
                 item { SectionHeader("Installed") {} }
-                items(installed, key = { "i" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install) }
+                items(installed, key = { "i" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install, ratings[it.app.id].takeIf { reviewsOn }, reviewsOn, { showProfile = true }, ::refreshRatings) }
             }
             if (available.isNotEmpty()) {
                 item { SectionHeader("Available") {} }
-                items(available, key = { "a" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install) }
+                items(available, key = { "a" + it.app.id }) { AppCard(it, states[it.app.packageName], ::install, ratings[it.app.id].takeIf { reviewsOn }, reviewsOn, { showProfile = true }, ::refreshRatings) }
             }
             if (lastChecked > 0) item {
                 val ago = System.currentTimeMillis() - lastChecked
@@ -221,6 +230,7 @@ fun ShelfScreen() {
     }
 
     if (showSettings) SettingsDialog(onDismiss = { showSettings = false }, onFeedChanged = { apps = emptyList(); refresh() })
+    if (showProfile) ProfileSheet(apps, onDismiss = { showProfile = false })
 }
 
 private fun openUnknownSources(ctx: Context) {
@@ -251,7 +261,10 @@ private fun Notice(title: String, body: String, action: String, onClick: () -> U
 }
 
 @Composable
-private fun AppCard(row: AppRow, state: InstallState?, onInstall: (AppEntry) -> Unit) {
+private fun AppCard(
+    row: AppRow, state: InstallState?, onInstall: (AppEntry) -> Unit,
+    rating: Rating?, reviewsOn: Boolean, onNeedSignIn: () -> Unit, onReviewsChanged: () -> Unit,
+) {
     val ctx = LocalContext.current
     val app = row.app
     var expanded by rememberSaveable(app.id) { mutableStateOf(false) }
@@ -270,6 +283,11 @@ private fun AppCard(row: AppRow, state: InstallState?, onInstall: (AppEntry) -> 
                         else -> "${app.versionName} · ${Formatter.formatShortFileSize(ctx, app.size)}"
                     }
                     Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (rating != null && rating.count > 0) Row(verticalAlignment = Alignment.CenterVertically) {
+                        Stars(rating.average, 11.dp)
+                        Text(" %.1f (%d)".format(rating.average, rating.count), style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
                 Spacer(Modifier.width(8.dp))
                 Box(Modifier.height(40.dp), contentAlignment = Alignment.Center) {
@@ -313,6 +331,7 @@ private fun AppCard(row: AppRow, state: InstallState?, onInstall: (AppEntry) -> 
                         ctx.startActivity(Intent(Intent.ACTION_DELETE, Uri.parse("package:${app.packageName}")))
                     }) { Text("Uninstall") }
                 }
+                if (reviewsOn) ReviewsSection(app, row.installed, onNeedSignIn, onReviewsChanged)
             }
         }
     }
@@ -343,6 +362,8 @@ private fun SettingsDialog(onDismiss: () -> Unit, onFeedChanged: () -> Unit) {
     var auto by remember { mutableStateOf(Prefs.autoUpdate(ctx)) }
     val original = remember { Prefs.feedUrl(ctx) }
     var feed by remember { mutableStateOf(original) }
+    val originalReviews = remember { Prefs.reviewsUrl(ctx) }
+    var reviews by remember { mutableStateOf(originalReviews) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Settings") },
@@ -362,13 +383,20 @@ private fun SettingsDialog(onDismiss: () -> Unit, onFeedChanged: () -> Unit) {
                 }
                 OutlinedTextField(value = feed, onValueChange = { feed = it }, label = { Text("Catalog URL") },
                     singleLine = true, textStyle = MaterialTheme.typography.bodySmall)
-                TextButton(onClick = { feed = BuildConfig.FEED_URL }) { Text("Reset to default") }
+                OutlinedTextField(value = reviews, onValueChange = { reviews = it }, label = { Text("Reviews server") },
+                    singleLine = true, textStyle = MaterialTheme.typography.bodySmall)
+                TextButton(onClick = { feed = BuildConfig.FEED_URL; reviews = BuildConfig.REVIEWS_URL }) { Text("Reset to default") }
                 Text("Shelf ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         },
         confirmButton = {
             TextButton(onClick = {
+                if (reviews.trim() != originalReviews) {
+                    Prefs.setReviewsUrl(ctx, reviews.takeIf { it.trim() != BuildConfig.REVIEWS_URL })
+                    Account.clear(ctx)
+                    (ctx as? android.app.Activity)?.recreate()
+                }
                 if (feed.trim() != original) {
                     Prefs.setFeedUrl(ctx, feed.takeIf { it.trim() != BuildConfig.FEED_URL })
                     onFeedChanged()

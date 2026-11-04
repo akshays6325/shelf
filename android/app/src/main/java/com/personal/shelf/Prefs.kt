@@ -24,4 +24,16 @@ object Prefs {
     /** The set of "package:versionCode" we last notified about, so each update is announced once. */
     fun notified(ctx: Context): Set<String> = p(ctx).getStringSet("notified", emptySet()) ?: emptySet()
     fun setNotified(ctx: Context, s: Set<String>) = p(ctx).edit().putStringSet("notified", s).apply()
+
+    fun reviewsUrl(ctx: Context): String = p(ctx).getString("reviews", null) ?: BuildConfig.REVIEWS_URL
+    fun setReviewsUrl(ctx: Context, url: String?) = p(ctx).edit().putString("reviews", url?.trim()).apply()
+
+    fun sessionToken(ctx: Context): String? = p(ctx).getString("session", null)
+    fun setSessionToken(ctx: Context, t: String?) = p(ctx).edit().putString("session", t).apply()
+
+    fun userJson(ctx: Context): String? = p(ctx).getString("user", null)
+    fun setUserJson(ctx: Context, s: String?) = p(ctx).edit().putString("user", s).apply()
+
+    fun cachedRatings(ctx: Context): String? = p(ctx).getString("ratings", null)
+    fun setCachedRatings(ctx: Context, s: String) = p(ctx).edit().putString("ratings", s).apply()
 }
