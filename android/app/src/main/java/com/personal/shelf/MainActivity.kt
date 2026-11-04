@@ -134,6 +134,7 @@ fun ShelfScreen() {
             } catch (e: Exception) {
                 error = "Couldn't reach the catalog: ${e.message}"
             } finally {
+                tick++
                 loading = false
             }
         }
