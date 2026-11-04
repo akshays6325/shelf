@@ -5,16 +5,16 @@
       "name": "Shelf",
       "packageName": "com.personal.shelf",
       "description": "Your private app store. Installs and updates your own apps, in the background where Android allows it.",
-      "versionCode": 4,
-      "versionName": "1.3",
-      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/shelf-v4/shelf-1.3.apk",
-      "sha256": "ee5e07c234cade813686f9b50c202e3dc9e16b4319e6f86aaddc14152bf73a31",
-      "size": 7857688,
+      "versionCode": 5,
+      "versionName": "1.4",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/shelf-v5/shelf-1.4.apk",
+      "sha256": "f8616550a0d36d8359bb026b80e38d450c947f7c20290b5199d137b1b3ec8c15",
+      "size": 7859020,
       "iconUrl": "icons/shelf.png",
-      "changelog": "Clearer message when the phone has no Google account",
-      "updatedAt": "2026-11-04T17:07:16.591Z",
+      "changelog": "Notifies you whenever an installed app has an update, including ones that install automatically",
+      "updatedAt": "2026-11-04T22:46:19.537Z",
       "certSha256": "7df7ee706bae69112cdaf6ba2afd7eb49223ff24a2c063f4784adf344e9c8e44",
-      "commit": "06dfa99e6925375475511d652d199e512ac5f09a"
+      "commit": "85ee7a2ad2571a1a2270ae1228a3436043945bc9"
     },
     {
       "id": "cleantube",
@@ -49,5 +49,5 @@
       "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
     }
   ],
-  "updated": "2026-11-04T21:42:43.680Z"
+  "updated": "2026-11-04T22:46:19.537Z"
 }
