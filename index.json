@@ -47,22 +47,6 @@
       "updatedAt": "2026-11-04T16:19:49.003Z",
       "certSha256": "ac96fde05c01a315f25b051efbcf6415dc49468d2a681d26e9ce833857e05750",
       "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
-    },
-    {
-      "id": "yt-no-shorts",
-      "name": "YT No Shorts",
-      "packageName": "com.personal.ytnoshorts",
-      "description": "The YouTube mobile site with Shorts stripped out and ads blocked.",
-      "versionCode": 1,
-      "versionName": "1.0",
-      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/yt-no-shorts-v1/yt-no-shorts-1.0.apk",
-      "sha256": "d0709b49b16bebd378c613ede5b79506fc778daed9d86970ac3f7f4f90f90d5f",
-      "size": 21017,
-      "iconUrl": "icons/yt-no-shorts.png",
-      "changelog": "Improvements and fixes.",
-      "updatedAt": "2026-11-04T16:20:06.523Z",
-      "certSha256": "6f8b4ae4296eb25071f7f46dace0a2ce29645bd8191c08d2bb47ee28f475757b",
-      "commit": null
     }
   ],
   "updated": "2026-11-04T16:22:58.276Z"

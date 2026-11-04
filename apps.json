@@ -39,19 +39,6 @@
         "code": "--version-code (\\d+)",
         "name": "--version-name (\\S+)"
       }
-    },
-    {
-      "id": "yt-no-shorts",
-      "name": "YT No Shorts",
-      "description": "The YouTube mobile site with Shorts stripped out and ads blocked.",
-      "dir": "../youtube-no-shorts",
-      "build": "bash build.sh",
-      "apk": "dist/yt-no-shorts.apk",
-      "version": {
-        "file": "build.sh",
-        "code": "--version-code (\\d+)",
-        "name": "--version-name (\\S+)"
-      }
     }
   ]
 }
