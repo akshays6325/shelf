@@ -1,0 +1,57 @@
+{
+  "repo": "akshays6325/shelf",
+  "apps": [
+    {
+      "id": "shelf",
+      "name": "Shelf",
+      "description": "Your private app store. Installs and updates your own apps, in the background where Android allows it.",
+      "dir": "android",
+      "build": "bash build-apk.sh",
+      "apk": "dist/shelf.apk",
+      "version": {
+        "file": "app/build.gradle.kts",
+        "code": "versionCode = (\\d+)",
+        "name": "versionName = \"([^\"]+)\""
+      }
+    },
+    {
+      "id": "cleantube",
+      "name": "CleanTube",
+      "description": "Native YouTube client with no Shorts and no ads. Background play, picture-in-picture, SponsorBlock, downloads and captions.",
+      "dir": "../cleantube",
+      "build": "bash build-apk.sh",
+      "apk": "dist/cleantube.apk",
+      "version": {
+        "file": "app/build.gradle.kts",
+        "code": "versionCode = (\\d+)",
+        "name": "versionName = \"([^\"]+)\""
+      }
+    },
+    {
+      "id": "insta-no-reels",
+      "name": "Insta",
+      "description": "Instagram without Reels. Feed, stories and messages, with every Reel link and tab removed.",
+      "dir": "../insta-no-reels/android-native",
+      "build": "bash build.sh",
+      "apk": "../dist/insta-no-reels.apk",
+      "version": {
+        "file": "build.sh",
+        "code": "--version-code (\\d+)",
+        "name": "--version-name (\\S+)"
+      }
+    },
+    {
+      "id": "yt-no-shorts",
+      "name": "YT No Shorts",
+      "description": "The YouTube mobile site with Shorts stripped out and ads blocked.",
+      "dir": "../youtube-no-shorts",
+      "build": "bash build.sh",
+      "apk": "dist/yt-no-shorts.apk",
+      "version": {
+        "file": "build.sh",
+        "code": "--version-code (\\d+)",
+        "name": "--version-name (\\S+)"
+      }
+    }
+  ]
+}
