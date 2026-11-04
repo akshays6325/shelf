@@ -122,6 +122,8 @@ object ReviewsApi {
             CredentialManager.create(activity).getCredential(activity, request).credential
         } catch (e: GetCredentialCancellationException) {
             return
+        } catch (e: androidx.credentials.exceptions.NoCredentialException) {
+            throw ApiException("No Google account on this phone. Add one in Settings → Passwords & accounts, then try again.", 0)
         }
         if (cred !is CustomCredential || cred.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             throw ApiException("Google didn't return an account", 0)
