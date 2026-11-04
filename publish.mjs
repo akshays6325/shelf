@@ -122,14 +122,20 @@ function smokeTest(apk, pkg) {
     r = adb('install', apk);
   }
   if (!r.ok) fail(`Install on the emulator failed:\n${r.out}`);
+  const sleep = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+  sleep(2000); // let the package manager finish settling the new install
   adb('logcat', '-c');
-  adb('shell', 'am', 'force-stop', pkg);
-  const launch = adb('shell', 'monkey', '-p', pkg, '-c', 'android.intent.category.LAUNCHER', '1');
-  if (!launch.ok || /No activities found/.test(launch.out)) fail(`Couldn't launch ${pkg}:\n${launch.out}`);
-  log('  Launched; watching for crashes for 8 s...');
-  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 8000);
-  const crash = adb('logcat', '-d', '-b', 'crash').out;
-  const alive = adb('shell', 'pidof', pkg).out.trim();
+  adb('logcat', '-b', 'crash', '-c');
+  let crash = '', alive = '';
+  for (let attempt = 1; attempt <= 2 && !alive && !crash.includes(pkg); attempt++) {
+    adb('shell', 'am', 'force-stop', pkg);
+    const launch = adb('shell', 'monkey', '-p', pkg, '-c', 'android.intent.category.LAUNCHER', '1');
+    if (!launch.ok || /No activities found/.test(launch.out)) fail(`Couldn't launch ${pkg}:\n${launch.out}`);
+    log(`  Launched${attempt > 1 ? ' again' : ''}; watching for crashes for 8 s...`);
+    sleep(8000);
+    crash = adb('logcat', '-d', '-b', 'crash').out;
+    alive = adb('shell', 'pidof', pkg).out.trim();
+  }
   if (crash.includes(pkg) || !alive) {
     const tail = crash.split('\n').filter(Boolean).slice(0, 25).join('\n');
     fail(`${pkg} crashed on launch.\n${tail || '(process not running, no crash log)'}`);
