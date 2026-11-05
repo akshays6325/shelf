@@ -47,7 +47,23 @@
       "updatedAt": "2026-11-04T16:19:49.003Z",
       "certSha256": "ac96fde05c01a315f25b051efbcf6415dc49468d2a681d26e9ce833857e05750",
       "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
+    },
+    {
+      "id": "repline",
+      "name": "Repline",
+      "packageName": "com.repline.tracker",
+      "description": "Strength workout tracker with 3D exercise demos. Works offline, with optional cloud backup.",
+      "versionCode": 5,
+      "versionName": "1.2.1",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/repline-v5/repline-1.2.1.apk",
+      "sha256": "479ad7bc226b51e6b55279c7bb8b745cfa1ef3bf9c72016d7607d9b2ce21d5ba",
+      "size": 118632398,
+      "iconUrl": "",
+      "changelog": "Fixes data loss, stuck sync and over-sharing; adds password reset; runs on all Android CPU types",
+      "updatedAt": "2026-11-05T05:27:41.248Z",
+      "certSha256": "4388a852f433f14f3054d215e6b2a8b4978a167db7c384b3e7bfb244a1bc45fb",
+      "commit": "a9283f27cb98f323f5ea4f1fcb85af483c1e1277"
     }
   ],
-  "updated": "2026-11-05T03:42:15.681Z"
+  "updated": "2026-11-05T05:27:41.248Z"
 }
