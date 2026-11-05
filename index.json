@@ -21,16 +21,16 @@
       "name": "CleanTube",
       "packageName": "com.personal.cleantube",
       "description": "Native YouTube client with no Shorts and no ads. Background play, picture-in-picture, SponsorBlock, downloads and captions.",
-      "versionCode": 9,
-      "versionName": "1.8",
-      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/cleantube-v9/cleantube-1.8.apk",
-      "sha256": "19d1542a926303581e39645e8aec7bc13646e6967baf98b9cf71a146fc2e8714",
-      "size": 12293610,
+      "versionCode": 10,
+      "versionName": "1.9",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/cleantube-v10/cleantube-1.9.apk",
+      "sha256": "8c2ac1ee55ece17c45b260dd03ea8ab0950ee39c7b3a67ef6f38dcecb170fa54",
+      "size": 12300754,
       "iconUrl": "icons/cleantube.png",
-      "changelog": "New floating mini player you can drag, pinch to resize and throw away, plus a glass look with a frosted tab bar",
-      "updatedAt": "2026-11-05T02:16:29.064Z",
+      "changelog": "More reliable playback: expired videos recover by themselves, errors show in the mini player, and the queue no longer empties itself when offline. Screen stays on while playing, and speed is remembered.",
+      "updatedAt": "2026-11-05T02:55:51.632Z",
       "certSha256": "311e183e8289236c8c0253b19838f4ecd11a8c5b5b76dc330d9b821d0c3cfde7",
-      "commit": "7decc4c9c8c0d45057847c2d5558d5d823134a23"
+      "commit": "ac3f619a7d268f3d48feda8c626a80cd3e7dea57"
     },
     {
       "id": "insta-no-reels",
@@ -49,5 +49,5 @@
       "commit": "9250852dde267b076cf10c84e68d9c82c6b4cb69"
     }
   ],
-  "updated": "2026-11-05T02:16:29.064Z"
+  "updated": "2026-11-05T02:55:51.632Z"
 }
