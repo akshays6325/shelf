@@ -44,6 +44,19 @@
         "code": "--version-code (\\d+)",
         "name": "--version-name (\\S+)"
       }
+    },
+    {
+      "id": "repline",
+      "name": "Repline",
+      "description": "Strength workout tracker with 3D exercise demos. Works offline, with optional cloud backup.",
+      "dir": "../repline",
+      "build": "bash scripts/shelf-build.sh",
+      "apk": "dist/repline.apk",
+      "version": {
+        "file": "app.json",
+        "code": "\"versionCode\": (\\d+)",
+        "name": "\"version\": \"([^\"]+)\""
+      }
     }
   ]
 }
