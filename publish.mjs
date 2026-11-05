@@ -109,9 +109,9 @@ function emulator() {
   return out.split('\n').map((l) => l.trim().split(/\s+/)).find(([s, st]) => s?.startsWith('emulator-') && st === 'device')?.[0] || null;
 }
 
-function smokeTest(apk, pkg) {
+function smokeTest(apk, pkg, smoke) {
   const dev = emulator();
-  if (!dev) { log('  No emulator running: skipping the smoke test.'); return; }
+  if (!dev) fail('No emulator is running, so this build can\'t be tested. Start one, or pass --skip-test to publish it untested.');
   const adb = (...a) => tryRun(ADB, ['-s', dev, ...a]);
   log(`  Installing on ${dev}...`);
   let r = adb('install', '-r', '-d', apk);
@@ -141,6 +141,26 @@ function smokeTest(apk, pkg) {
     fail(`${pkg} crashed on launch.\n${tail || '(process not running, no crash log)'}`);
   }
   log('  ✓ Starts and keeps running.');
+  if (smoke) watchVideo(adb, sleep, pkg, smoke);
+}
+
+// A build can start fine and still play nothing, so open a real video and wait for the app to
+// log (see "smoke" in apps.json) that it is actually moving forward.
+function watchVideo(adb, sleep, pkg, { url, logTag, logText }) {
+  log(`  Opening ${url} and waiting for it to play...`);
+  adb('logcat', '-c');
+  const opened = adb('shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url, pkg);
+  if (!opened.ok || /Error:/.test(opened.out)) fail(`Couldn't open the test video:\n${opened.out}`);
+  let played = false;
+  for (let waited = 0; waited < 90 && !played; waited += 3) {
+    sleep(3000);
+    played = adb('logcat', '-d', '-s', `${logTag}:I`).out.includes(logText);
+    const crash = adb('logcat', '-d', '-b', 'crash').out;
+    if (crash.includes(pkg)) fail(`${pkg} crashed while playing the test video.\n${crash.split('\n').filter(Boolean).slice(0, 25).join('\n')}`);
+  }
+  adb('shell', 'am', 'force-stop', pkg);
+  if (!played) fail('The test video did not play within 90 s, so this build is not being published. If YouTube or the network is the problem, pass --skip-test.');
+  log('  ✓ Plays a video.');
 }
 
 // ---- changelog ------------------------------------------------------------
@@ -196,7 +216,7 @@ function publish(app, index) {
 
   step('Test');
   if (flag('--skip-test')) log('  Skipped (--skip-test).');
-  else smokeTest(apk, info.packageName);
+  else smokeTest(apk, info.packageName, app.smoke);
 
   const asset = `${app.id}-${info.versionName}.apk`;
   const tag = `${app.id}-v${info.versionCode}`;

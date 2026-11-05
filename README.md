@@ -23,6 +23,9 @@ node publish.mjs --list                 # what's published
 node publish.mjs cleantube --dry-run    # everything except uploading
 ```
 
+Publishing stops if no emulator is running, if the app crashes on launch, or if an app with a
+`smoke` entry in `apps.json` can't play its test video. `--skip-test` publishes without testing.
+
 Apps are configured in `apps.json` (source folder, build command, APK path, where the version lives).
 `publish.mjs` refuses to publish an APK signed with a different key than the last release, since phones
 would reject it. Each app's `signing/` folder holds its key: keep backups.

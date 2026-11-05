@@ -21,6 +21,11 @@
       "dir": "../cleantube",
       "build": "bash build-apk.sh",
       "apk": "dist/cleantube.apk",
+      "smoke": {
+        "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+        "logTag": "CleanTubePlayback",
+        "logText": "Video is playing"
+      },
       "version": {
         "file": "app/build.gradle.kts",
         "code": "versionCode = (\\d+)",
