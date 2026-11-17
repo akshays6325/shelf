@@ -53,17 +53,17 @@
       "name": "Repline",
       "packageName": "com.repline.tracker",
       "description": "Strength workout tracker with 3D exercise demos. Works offline, with optional cloud backup.",
-      "versionCode": 9,
-      "versionName": "1.2.5",
-      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/repline-v9/repline-1.2.5.apk",
-      "sha256": "f362465fd075faef0b7f5778b2c02fec227dbdc001e4218b26e37471e2404a7b",
-      "size": 120205654,
+      "versionCode": 10,
+      "versionName": "1.3.0",
+      "apkUrl": "https://github.com/akshays6325/shelf/releases/download/repline-v10/repline-1.3.0.apk",
+      "sha256": "1e03b9cb8a4a1e0b88e60d44e255cb9a3a92d84cf95f390553c96ef57da6c8f5",
+      "size": 120250767,
       "iconUrl": "",
-      "changelog": "New 3D figure: natural face, real hands, fuller body, and fixes to elbows and machine pads.",
-      "updatedAt": "2026-11-07T04:16:42.257Z",
+      "changelog": "Revamp: today's target on every lift, ticks log what you just lifted, plates per side, warm-up sets, finish compares with last time, and a new glass look with real blur",
+      "updatedAt": "2026-11-17T02:45:07.184Z",
       "certSha256": "4388a852f433f14f3054d215e6b2a8b4978a167db7c384b3e7bfb244a1bc45fb",
-      "commit": "90f2fea2359b3e8ef83e9c6ddd6df00b4b118342"
+      "commit": "b0838fe81e8b73e1f8964001ee59f91fe2f825d0"
     }
   ],
-  "updated": "2026-11-16T22:08:57.229Z"
+  "updated": "2026-11-17T02:45:07.184Z"
 }
